@@ -5,7 +5,7 @@ from prompts.prompt_builder import get_education_prompt
 # ページ設定 (スマホ最適化)
 st.set_page_config(page_title="Expert AST Guide", layout="centered")
 
-# --- UIデザイン: セレクトボックスの固定を解除し、標準の配置へ ---
+# --- UIデザイン ---
 st.markdown("""
 <style>
     .main .block-container { padding-bottom: 80px; }
@@ -32,16 +32,30 @@ if df is None:
     st.error("⚠️ data.csv が読み込めません。")
     st.stop()
 
-# リスクIDをキーにして説明文を引ける辞書を作る
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
-# タイトル表示
 st.title("Expert AST Guide")
 
 syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
 
-# セレクトボックスを画面上部（標準位置）に配置
-syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
+# --- 【変更点1】スマホでのキーボード表示対策 ---
+# selectboxの代わりに popover と radio を使ってキーボードが出ないドロップダウンを作成
+if "focus" not in st.session_state:
+    st.session_state.focus = "未選択"
+
+with st.popover(f"📌 感染フォーカスを選択: {st.session_state.focus}", use_container_width=True):
+    selected_focus = st.radio(
+        "感染フォーカス", 
+        syndrome_list, 
+        index=syndrome_list.index(st.session_state.focus),
+        label_visibility="collapsed"
+    )
+    # 選択が変更されたら即座に再実行してポップオーバーのラベルに反映させる
+    if selected_focus != st.session_state.focus:
+        st.session_state.focus = selected_focus
+        st.rerun()
+
+syndrome = st.session_state.focus
 
 if syndrome != "未選択":
     st.subheader("⚠️ 患者リスク層別化")
@@ -103,6 +117,22 @@ if syndrome != "未選択":
                 if val not in final_regimens:
                     final_regimens.append(val)
 
+    # --- 【変更点2】院内採用外薬剤の除外 ---
+    final_regimens = [r for r in final_regimens if "フロモキサシン" not in r]
+
+    # --- 【変更点3】ペニシリンアレルギー時の除外処理 ---
+    if allergy_pcg:
+        # ペニシリン系を特定するキーワード群（セフェム系は含まれないため残ります）
+        pcg_keywords = ["ABPC", "AMPC", "PIPC", "SBT/ABPC", "TAZ/PIPC", "AMPC/CVA", "PCG", "ペニシリン", "アンピシリン", "ピペラシリン"]
+        original_len = len(final_regimens)
+        
+        # キーワードを含まないレジメンだけを残す
+        final_regimens = [r for r in final_regimens if not any(kw in r for kw in pcg_keywords)]
+        
+        # 除外が発生した場合は実行軌跡に記録を残す
+        if len(final_regimens) < original_len:
+            rationales.append("• 【自動除外】PCGアレルギーのため、ペニシリン系薬剤を候補から除外しました。")
+
     # --- UIの改善: 結果をカードデザインで囲む ---
     st.divider()
     
@@ -117,10 +147,9 @@ if syndrome != "未選択":
         if final_regimens:
             for r in final_regimens:
                 if r.strip():
-                    # 👈 TAZ/PIPCが分割されないよう、そのまま表示
                     st.success(r.strip()) 
         else:
-            st.warning("該当するレジメンデータがありません")
+            st.warning("該当するレジメンデータがありません（またはアレルギー等ですべて除外されました）")
 
         with st.expander("📖 ロジックの実行軌跡 (Rationale)"):
             if rationales:
@@ -135,9 +164,8 @@ if syndrome != "未選択":
     st.caption("以下の枠内の右上にあるコピーボタンを押し、Gemini等に貼り付けると、医学的な解説を出力します。")
     
     risk_text = "特になし" if not active_risk_names else "、".join(active_risk_names)
-    regimen_text = " または ".join(final_regimens) if final_regimens else "不明"
+    regimen_text = " または ".join(final_regimens) if final_regimens else "なし"
     pathogen_text = "、".join(final_pathogens) if final_pathogens else "不明"
     
-    # プロンプト生成は別ファイルの関数を呼び出し
     llm_prompt = get_education_prompt(syndrome, risk_text, pathogen_text, regimen_text)
     st.code(llm_prompt, language="markdown")
