@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from prompts.prompt_builder import get_education_prompt  # 👈 追加
 
 # ページ設定 (スマホ最適化)
 st.set_page_config(page_title="Expert AST Guide", layout="centered")
