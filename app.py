@@ -149,21 +149,29 @@ if not rules.empty:
             elif action == 'add_regimen' and val not in final_regimens:
                 final_regimens.append(val)
 
-    # 🌟 ステップ3: 禁忌薬剤の強制フィルタリング（最終安全チェック）
+        # 🌟 ステップ3: 禁忌薬剤の強制フィルタリング（個別に判定）
     if allergy_pcg:
-        # 除外したいペニシリン系薬剤のキーワード（部分一致で弾きます）
         forbidden_drugs = ["PCG", "TAZ/PIPC", "ABPC", "SBT/ABPC", "PIPC"]
         
         safe_regimens = []
         for r in final_regimens:
-            # 薬剤名(r)の中に forbidden_drugs の文字列が含まれていないか確認
-            if not any(forbidden in r for forbidden in forbidden_drugs):
-                safe_regimens.append(r)
-            else:
-                # 削除した場合は理由を Rationale に追記して見える化する
-                rationales.append(f"⚠️ 【禁忌回避】ペニシリンアレルギーのため候補から「{r}」を強制除外しました。")
+            # 1. まず「 / 」で分割して個別の薬剤（ユニット）にする
+            units = [u.strip() for u in r.split('/')]
+            
+            # 2. 禁忌ワードを含まないユニットだけを抽出
+            safe_units = [u for u in units if not any(f in u for f in forbidden_drugs)]
+            
+            # 3. 安全なユニットが残っていれば、再度「 / 」で結合してリストに戻す
+            if safe_units:
+                safe_regimens.append(" / ".join(safe_units))
+            
+            # 削除が発生した場合の通知
+            if len(units) > len(safe_units):
+                removed = set(units) - set(safe_units)
+                rationales.append(f"⚠️ 【禁忌回避】アレルギーのため、候補から「{', '.join(removed)}」を除外しました。")
         
         final_regimens = safe_regimens
+
 
 # --- 結果表示 (推奨エンピリック治療カード) ---
 st.divider()
