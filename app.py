@@ -57,7 +57,11 @@ df = load_data("data.csv")
 risk_df = load_data("risks.csv")
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
-syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
+# エラー回避: dfが読み込めていない場合の処理を追加しておくと安全です
+if df is not None:
+    syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
+else:
+    syndrome_list = ["未選択"]
 
 # --- コンボボックス風ピッカーUI ---
 # ポップオーバーのボタン名に現在選択されているフォーカスを表示
@@ -66,7 +70,7 @@ with st.popover(f"📌 感染フォーカス: {st.session_state.syndrome}"):
     selected = st.radio(
         "感染フォーカスを選択", 
         syndrome_list, 
-        index=syndrome_list.index(st.session_state.syndrome),
+        index=syndrome_list.index(st.session_state.syndrome) if st.session_state.syndrome in syndrome_list else 0,
         label_visibility="collapsed" # ラベルを隠してすっきり見せる
     )
     
@@ -76,7 +80,7 @@ with st.popover(f"📌 感染フォーカス: {st.session_state.syndrome}"):
         st.rerun()
 
 # --- 以降のロジックは st.session_state.syndrome を使用 ---
-if st.session_state.syndrome != "未選択":
+if st.session_state.syndrome != "未選択" and df is not None:
     st.subheader(f"📍 ターゲット: {st.session_state.syndrome}")
     st.caption("該当する患者リスクをオンにしてください")
     
@@ -89,8 +93,6 @@ if st.session_state.syndrome != "未選択":
         risk_esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
         risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
         is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
-
-    # ... (この下のルール判定・結果表示・プロンプト生成は前回と同じです。syndromeの部分だけst.session_state.syndromeになります) ...
 
     # --- ルールエンジンの評価プロセス ---
     active_triggers = ['base']
@@ -115,7 +117,9 @@ if st.session_state.syndrome != "未選択":
         active_triggers.append('is_shock')
         active_risk_names.append("敗血症性ショック（血行動態不安定）")
 
-    rules = df[df['syndrome'] == syndrome]
+    # 👇 修正箇所 1: st.session_state.syndrome に変更
+    rules = df[df['syndrome'] == st.session_state.syndrome]
+    
     final_pathogens = []
     final_regimens = []
     rationales = []
@@ -145,7 +149,6 @@ if st.session_state.syndrome != "未選択":
         st.subheader("💊 推奨エンピリック治療")
         
         st.markdown("**🎯 想定起炎菌:**")
-        # リストが空の場合のプレースホルダーを追加
         pathogen_display = " , ".join(final_pathogens) if final_pathogens else "データなし"
         st.info(pathogen_display)
 
@@ -164,19 +167,17 @@ if st.session_state.syndrome != "未選択":
                     st.markdown(msg)
             else:
                 st.markdown("実行軌跡はありません")
+                
     # --- 新人教育用 LLMプロンプト生成機能 ---
     st.divider()
     st.subheader("🎓 新人教育用：AI解説プロンプト")
     st.caption("以下の枠内の右上にあるコピーボタンを押し、Gemini等に貼り付けると、医学的な解説を出力します。")
     
-    # 選択状況に応じたテキストの動的生成
     risk_text = "特になし" if not active_risk_names else "、".join(active_risk_names)
     regimen_text = " または ".join(final_regimens) if final_regimens else "不明"
     pathogen_text = "、".join(final_pathogens) if final_pathogens else "不明"
     
-    # 👈 別ファイルの関数を呼び出してプロンプトを生成
-    llm_prompt = get_education_prompt(syndrome, risk_text, pathogen_text, regimen_text)
+    # 👇 修正箇所 2: st.session_state.syndrome に変更
+    llm_prompt = get_education_prompt(st.session_state.syndrome, risk_text, pathogen_text, regimen_text)
 
-    # コピーしやすいように st.code を使用
     st.code(llm_prompt, language="markdown")
-
