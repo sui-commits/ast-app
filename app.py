@@ -134,8 +134,7 @@ if syndrome != "未選択":
                 for msg in rationales:
                     st.markdown(msg)
             else:
-                st.markdown("実行軌跡はありません。")
-
+                st.markdown("実行軌跡はありません")
     # --- 新人教育用 LLMプロンプト生成機能 ---
     st.divider()
     st.subheader("🎓 新人教育用：AI解説プロンプト")
@@ -146,23 +145,9 @@ if syndrome != "未選択":
     regimen_text = " または ".join(final_regimens) if final_regimens else "不明"
     pathogen_text = "、".join(final_pathogens) if final_pathogens else "不明"
     
-    llm_prompt = f"""あなたは感染症専門医および指導医です。新人医療従事者（若手薬剤師や研修医）に対して、以下のエンピリック治療の選択ロジックを分かりやすく解説してください。
-
-【症例設定】
-・疑われる感染フォーカス: {syndrome}
-・患者のリスク因子: {risk_text}
-
-【当院システムが提示した推奨レジメン】
-・想定される起炎菌: {pathogen_text}
-・推奨薬剤: {regimen_text}
-
-【解説してほしいこと】
-1. なぜこの起炎菌を想定する必要があるのか（疫学やリスク因子との関連）
-2. なぜこの抗菌薬が選択されたのか（スペクトル、組織移行性、ガイドラインの根拠）
-3. この治療を行う上でのモニタリングの注意点（副作用、培養結果確認後のデ・エスカレーションのポイント）
-4. （もしあれば）代替薬の選択肢と、それを選ばなかった理由
-
-専門的な用語は使いつつも、クリニカル・リーズニングの思考プロセスが伝わるようにロジカルにステップ・バイ・ステップで解説してください。"""
+    # 👈 別ファイルの関数を呼び出してプロンプトを生成
+    llm_prompt = get_education_prompt(syndrome, risk_text, pathogen_text, regimen_text)
 
     # コピーしやすいように st.code を使用
     st.code(llm_prompt, language="markdown")
+
