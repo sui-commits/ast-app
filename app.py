@@ -62,24 +62,19 @@ if syndrome != "未選択":
     for _, row in rules.iterrows():
         trigger = str(row['trigger']).strip()
         
-        # このルールのトリガーが発火条件に含まれているか？
         if trigger in active_triggers:
             action = str(row['action']).strip()
             val = str(row['value']).strip()
             rat = str(row['rationale']).strip()
 
-            # 根拠・コメントの保存
             if rat:
                 rationales.append(f"✓ {rat}")
 
-            # アクションの実行（操作命令のパース）
             if action == 'add_pathogen':
                 final_pathogens.append(val)
             elif action == 'set_regimen' or action == 'override_regimen':
-                # レジメンを丸ごと書き換え
                 final_regimens = [val]
             elif action == 'add_regimen':
-                # レジメンを追加（併用）
                 if val not in final_regimens:
                     final_regimens.append(val)
 
@@ -92,9 +87,10 @@ if syndrome != "未選択":
 
     st.markdown("**💊 推奨レジメン:**")
     for r in final_regimens:
-        # スラッシュ区切りを見やすく分割して表示
-        for split_r in r.split('/'):
-            st.success(split_r.strip())
+        # ★修正箇所: 「 / 」（前後にスペースのあるスラッシュ）のみを区切り文字として認識する
+        for split_r in r.split(' / '):
+            if split_r.strip():
+                st.success(split_r.strip())
 
     with st.expander("📖 ロジックの実行軌跡 / Rationale", expanded=True):
         for msg in rationales:
