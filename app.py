@@ -27,9 +27,12 @@ df = load_data("data.csv")
 risk_df = load_data("risks.csv")
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
-# セレクトボックスを配置（bottom固定デザインを活かす場合はそのままでOK）
-syndrome_list = ["未選択"] + (df['syndrome'].unique().tolist() if df is not None else [])
-syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
+# 横並びのボタン形式（スマホアプリっぽい操作感）
+syndrome = st.segmented_control(
+    "📌 感染フォーカスを選択", 
+    syndrome_list, 
+    default="未選択"
+)
 
 # --- メインロジック ---
 if syndrome != "未選択":
