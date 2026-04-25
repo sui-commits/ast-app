@@ -93,35 +93,33 @@ with c2:
     risk_esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
     risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
     is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
+
+# --- ルール判定ロジック ---
+active_triggers = ['base']
+active_risk_names = []
+
+if allergy_pcg: 
+    active_triggers.append('allergy_pcg'); active_risk_names.append("ペニシリンアレルギー")
+if risk_mrsa: 
+    active_triggers.append('risk_mrsa'); active_risk_names.append("MRSAリスク")
+if risk_pseudo: 
+    active_triggers.append('risk_pseudo'); active_risk_names.append("緑膿菌リスク")
+if risk_esbl: 
+    active_triggers.append('risk_esbl'); active_risk_names.append("ESBLリスク")
 if risk_lis: 
     active_triggers.append('risk_lis'); active_risk_names.append("リステリアリスク")
 if is_shock: 
     active_triggers.append('is_shock'); active_risk_names.append("ショック状態")
-    # --- ルールエンジンの評価プロセス ---
-    active_triggers = ['base']
-    active_risk_names = []
 
-    if allergy_pcg: 
-        active_triggers.append('allergy_pcg'); active_risk_names.append("ペニシリンアレルギー")
-    if risk_mrsa: 
-        active_triggers.append('risk_mrsa'); active_risk_names.append("MRSAリスク")
-    if risk_pseudo: 
-        active_triggers.append('risk_pseudo'); active_risk_names.append("緑膿菌リスク")
-    if risk_esbl: 
-        active_triggers.append('risk_esbl'); active_risk_names.append("ESBLリスク")
-    if risk_lis: 
-        active_triggers.append('risk_lis'); active_risk_names.append("リステリアリスク")
-    if is_shock: 
-        active_triggers.append('is_shock'); active_risk_names.append("ショック状態")
+# フィルタリング
+rules = df[df['syndrome'] == st.session_state.syndrome] if df is not None else pd.DataFrame()
 
-    # フィルタリング
-    rules = df[df['syndrome'] == st.session_state.syndrome] if df is not None else pd.DataFrame()
+final_pathogens = []
+final_regimens = []
+rationales = []
 
-    final_pathogens = []
-    final_regimens = []
-    rationales = []
-
-    # 🌟 修正1: まず 'base' (基本ルール) だけを先にすべて適用する
+if not rules.empty:
+    # 🌟 ステップ1: まず 'base' (基本ルール) だけを先にすべて適用する
     for _, row in rules[rules['trigger'] == 'base'].iterrows():
         action = str(row['action']).strip()
         val = str(row['value']).strip()
@@ -135,7 +133,7 @@ if is_shock:
         elif action == 'add_regimen' and val not in final_regimens:
             final_regimens.append(val)
 
-    # 🌟 修正2: 次に 'base' 以外のリスク・アレルギールールを適用し、必要に応じて上書きさせる
+    # 🌟 ステップ2: 次に 'base' 以外のリスク・アレルギールールを適用し、必要に応じて上書きさせる
     for _, row in rules[rules['trigger'] != 'base'].iterrows():
         trigger = str(row['trigger']).strip()
         if trigger in active_triggers:
@@ -147,32 +145,9 @@ if is_shock:
             if action == 'add_pathogen':
                 final_pathogens.append(val)
             elif action in ['set_regimen', 'override_regimen']:
-                # 👈 ここでベースのPCGなどがリストから消去され、代替薬（VCMなど）に完全に置き換わります
                 final_regimens = [val]
             elif action == 'add_regimen' and val not in final_regimens:
                 final_regimens.append(val)
-
-# フィルタリング (未選択の場合は空のデータフレームになる)
-rules = df[df['syndrome'] == st.session_state.syndrome] if df is not None else pd.DataFrame()
-
-final_pathogens = []
-final_regimens = []
-rationales = []
-
-for _, row in rules.iterrows():
-    trigger = str(row['trigger']).strip()
-    if trigger in active_triggers:
-        action = str(row['action']).strip()
-        val = str(row['value']).strip()
-        rat = str(row['rationale']).strip()
-
-        if rat: rationales.append(f"• {rat}")
-        if action == 'add_pathogen':
-            final_pathogens.append(val)
-        elif action in ['set_regimen', 'override_regimen']:
-            final_regimens = [val]
-        elif action == 'add_regimen':
-            if val not in final_regimens: final_regimens.append(val)
 
 # --- 結果表示 (推奨エンピリック治療カード) ---
 st.divider()
