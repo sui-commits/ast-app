@@ -2,49 +2,39 @@ import streamlit as st
 import pandas as pd
 
 # ページ設定 (スマホ最適化)
-st.set_page_config(page_title="Rule-Engine AST Guide", layout="centered")
+st.set_page_config(page_title="Expert AST Guide", layout="centered")
 
+# --- UIデザイン: デザインと余白の設定 ---
 st.markdown("""
 <style>
-    /* 1. 下部に固定されるボックスに被らないよう、画面下の余白を確保 */
     .main .block-container { padding-bottom: 180px; }
-
-    /* 2. セレクトボックスを画面の最下部に強制固定（これで下から出るようになります） */
     div[data-testid="stSelectbox"] {
         position: fixed;
-        bottom: 30px;
-        left: 5%;
-        width: 90%;
-        z-index: 9999;
-        background-color: white;
-        padding: 8px;
-        border-radius: 15px;
+        bottom: 30px; left: 5%; width: 90%; z-index: 9999;
+        background-color: white; padding: 8px; border-radius: 15px;
         box-shadow: 0 -8px 20px rgba(0,0,0,0.15);
     }
-    
-    /* 3. トグルのデザインを少しスマホらしく */
     .stToggle { padding: 8px; background: #f8f9fa; border-radius: 10px; margin-bottom: 5px; }
+    .stTooltipIcon { color: #007bff; }
 </style>
 """, unsafe_allow_html=True)
 
+# ★ここが重要：データの読み込み関数を定義
 @st.cache_data
-def load_rules():
+def load_data(filename):
     try:
-        df = pd.read_csv("data.csv", encoding="utf-8-sig", skipinitialspace=True)
+        df = pd.read_csv(filename, encoding="utf-8-sig", skipinitialspace=True)
         df.columns = df.columns.str.strip()
         df.fillna("", inplace=True)
         return df
     except:
         return None
 
-st.title("🦠 Empiric Tx Guide")
-st.caption("順次評価型ルールエンジン / 新人教育サポート機能付き")
-
-# 疾患データとリスク説明データを両方読み込む
+# データの読み込み
 df = load_data("data.csv")
 risk_df = load_data("risks.csv")
 
-# リスクIDをキーにして説明文をすぐに引ける辞書を作る
+# リスクIDをキーにして説明文を引ける辞書を作る
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
 
