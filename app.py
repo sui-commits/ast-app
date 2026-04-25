@@ -92,7 +92,7 @@ with c1:
 with c2:
     risk_esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
     risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
-    is_shock = st.toggle("ショック状態", help=risk_help.get('
+    is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
 if risk_lis: 
     active_triggers.append('risk_lis'); active_risk_names.append("リステリアリスク")
 if is_shock: 
