@@ -40,10 +40,13 @@ def load_rules():
 st.title("🦠 Empiric Tx Guide")
 st.caption("順次評価型ルールエンジン / 新人教育サポート機能付き")
 
-df = load_rules()
-if df is None:
-    st.error("data.csv が読み込めません。")
-    st.stop()
+# 疾患データとリスク説明データを両方読み込む
+df = load_data("data.csv")
+risk_df = load_data("risks.csv")
+
+# リスクIDをキーにして説明文をすぐに引ける辞書を作る
+risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
+
 
 syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
 syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
@@ -54,14 +57,15 @@ if syndrome != "未選択":
     
     # UI改善: チェックボックスからiPhoneライクなトグルスイッチに変更
     c1, c2 = st.columns(2)
-    with c1:
-        risk_mrsa = st.toggle("MRSAリスク")
-        risk_pseudo = st.toggle("緑膿菌リスク")
-        allergy_pcg = st.toggle("PCGアレルギー")
-    with c2:
-        risk_esbl = st.toggle("ESBLリスク")
-        risk_lis = st.toggle("リステリアリスク")
-        is_shock = st.toggle("敗血症性ショック")
+with c1:
+    mrsa = st.toggle("MRSAリスク", help=risk_help.get('risk_mrsa'))
+    pseudo = st.toggle("緑膿菌リスク", help=risk_help.get('risk_pseudo'))
+    allergy = st.toggle("PCGアレルギー", help=risk_help.get('allergy_pcg'))
+with c2:
+    esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
+    lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
+    shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
+
 
     # --- ルールエンジンの評価プロセス ---
     active_triggers = ['base']
