@@ -1,38 +1,44 @@
-syndrome,Priority,MRSA,Pseudo,ESBL,Listeria,Shock,PCG_Allergy,Pathogens,Regimens,Rationale
-市中肺炎 (CAP) - 中等症〜重症,1,1,1,*,*,*,0,肺炎球菌; インフルエンザ菌; 緑膿菌; MRSA,CFPM + VCM; TAZ/PIPC + VCM,緑膿菌およびMRSAカバーが必須です。抗MRSA薬を追加し、抗緑膿菌活性のあるβラクタム系を選択します。
-市中肺炎 (CAP) - 中等症〜重症,2,1,1,*,*,*,1,肺炎球菌; インフルエンザ菌; 緑膿菌; MRSA,AZT + LVFX + VCM,PCGアレルギーを考慮し、緑膿菌・MRSAをカバーする非ペニシリン系多剤併用とします。
-市中肺炎 (CAP) - 中等症〜重症,3,0,1,*,*,*,0,肺炎球菌; インフルエンザ菌; 緑膿菌,CFPM + AZM; TAZ/PIPC + AZM,緑膿菌カバーのため、第4世代セフェムまたはTAZ/PIPCへエスカレーションします。
-市中肺炎 (CAP) - 中等症〜重症,4,0,1,*,*,*,1,肺炎球菌; インフルエンザ菌; 緑膿菌,LVFX (高用量),PCGアレルギーを考慮した緑膿菌カバーです。
-市中肺炎 (CAP) - 中等症〜重症,5,1,0,*,*,*,0,肺炎球菌; インフルエンザ菌; MRSA,CTRX + AZM + VCM; SBT/ABPC + AZM + VCM,標準治療に加えてMRSAカバー(VCM等)を追加します。
-市中肺炎 (CAP) - 中等症〜重症,6,1,0,*,*,*,1,肺炎球菌; インフルエンザ菌; MRSA,LVFX + VCM,PCGアレルギーを考慮し、レスピラトリーキノロンに抗MRSA薬を追加します。
-市中肺炎 (CAP) - 中等症〜重症,99,0,0,*,*,*,0,肺炎球菌; インフルエンザ菌; 非定型病原体,CTRX + AZM; SBT/ABPC + AZM,定型菌および非定型菌のダブルカバーを基本とします。
-市中肺炎 (CAP) - 中等症〜重症,100,0,0,*,*,*,1,肺炎球菌; インフルエンザ菌; 非定型病原体,LVFX 500mg/日,PCGアレルギーのためレスピラトリーキノロンを選択します。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,1,*,1,1,*,*,0,大腸菌; Klebsiella属; 緑膿菌 (ESBL産生),MEPM,緑膿菌およびESBL産生菌の双方をカバーするためカルバペネム系を選択します。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,2,*,1,1,*,*,1,大腸菌; Klebsiella属; 緑膿菌 (ESBL産生),AMK (アミカシン) ※全身状態安定時,PCGアレルギーがあり、多剤耐性を疑うためアミノグリコシド系を検討します。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,3,*,1,0,*,*,0,大腸菌; Klebsiella属; 緑膿菌,CFPM; TAZ/PIPC,緑膿菌カバーを含む広域スペクトルの抗菌薬を選択します。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,4,*,1,0,*,*,1,大腸菌; Klebsiella属; 緑膿菌,LVFX; AMK,PCGアレルギーを考慮した緑膿菌カバーです。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,5,*,0,1,*,*,0,大腸菌; Klebsiella属 (ESBL産生),MEPM; FMOX ※軽症〜中等症時,ESBL産生を想定し、カルバペネム系またはオキサセフェム系を第一選択とします。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,6,*,0,1,*,*,1,大腸菌; Klebsiella属 (ESBL産生),AMK (アミカシン),PCGアレルギーを考慮したESBLカバーです。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,99,*,0,0,*,*,0,大腸菌; Klebsiella属,CTRX; CMZ ※ESBL非産生想定,腸内細菌目細菌をターゲットとします。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,100,*,0,0,*,*,1,大腸菌; Klebsiella属,LVFX; AMK,PCGアレルギーのため代替薬を選択します。
-皮膚軟部組織感染症 (SSTI) / 蜂窩織炎,1,1,*,*,*,*,0,化膿レンサ球菌; 黄色ブドウ球菌 (MRSA),VCM; DAP,MRSAカバーが必須となるため、抗MRSA薬を選択します。
-皮膚軟部組織感染症 (SSTI) / 蜂窩織炎,2,1,*,*,*,*,1,化膿レンサ球菌; 黄色ブドウ球菌 (MRSA),VCM; DAP,PCGアレルギーでもVCM/DAPは安全に使用可能です。
-皮膚軟部組織感染症 (SSTI) / 蜂窩織炎,99,0,*,*,*,*,0,化膿レンサ球菌; 黄色ブドウ球菌 (MSSA),CEZ; SBT/ABPC,レンサ球菌およびMSSAをターゲットとした狭域スペクトルを基本とします。
-皮膚軟部組織感染症 (SSTI) / 蜂窩織炎,100,0,*,*,*,*,1,化膿レンサ球菌; 黄色ブドウ球菌 (MSSA),CLDM; VCM ※重症時,PCGアレルギーのためCLDM等を代替薬とします。
-腹腔内感染症 (IAI) / 胆嚢炎・憩室炎など,1,*,1,1,*,*,0,腸内細菌目細菌 (ESBL); 嫌気性菌; 緑膿菌,MEPM,緑膿菌・ESBLを含む広域カバーとしてカルバペネム系を選択します。
-腹腔内感染症 (IAI) / 胆嚢炎・憩室炎など,2,*,1,0,*,*,0,腸内細菌目細菌; 嫌気性菌; 緑膿菌,TAZ/PIPC; CFPM + MNZ,緑膿菌・嫌気性菌カバーのため広域化します。
-腹腔内感染症 (IAI) / 胆嚢炎・憩室炎など,3,*,0,1,*,*,0,腸内細菌目細菌 (ESBL); 嫌気性菌,MEPM,ESBL産生菌を想定しカルバペネム系を選択します。
-腹腔内感染症 (IAI) / 胆嚢炎・憩室炎など,99,*,0,0,*,*,0,腸内細菌目細菌; 嫌気性菌; 腸球菌,CMZ; CTRX + MNZ; SBT/ABPC,グラム陰性桿菌および嫌気性菌のカバーが必須です。
-腹腔内感染症 (IAI) / 胆嚢炎・憩室炎など,100,*,*,*,*,*,1,腸内細菌目細菌; 嫌気性菌,LVFX + MNZ,PCGアレルギーを考慮しキノロン＋メトロニダゾールとします。
-細菌性髄膜炎 (市中感染),1,*,*,*,1,*,0,肺炎球菌; 髄膜炎菌; リステリア,CTRX 4g/日 + VCM + ABPC 12g/日,リステリアカバーのためABPCを追加します。
-細菌性髄膜炎 (市中感染),2,*,*,*,1,*,1,肺炎球菌; 髄膜炎菌; リステリア,MEPM 6g/日 + VCM + (ST合剤 脱感作要相談),リステリアのリスクがありますがPCGアレルギーのためST合剤追加や脱感作を専門医と相談してください。
-細菌性髄膜炎 (市中感染),99,*,*,*,0,*,0,肺炎球菌; 髄膜炎菌,CTRX 4g/日 + VCM,血液培養採取後、直ちに抗菌薬とデキサメタゾンを投与してください。
-細菌性髄膜炎 (市中感染),100,*,*,*,0,*,1,肺炎球菌; 髄膜炎菌,MEPM 6g/日 + VCM,PCGアレルギーのためMEPMを代替薬とします。
-発熱性好中球減少症 (FN),1,1,*,*,*,*,0,緑膿菌; 腸内細菌目細菌; MRSA,CFPM + VCM; TAZ/PIPC + VCM,MRSAリスクがあるため、グラム陽性菌カバー（VCM等）を初期から追加します。
-発熱性好中球減少症 (FN),2,*,*,*,*,1,0,緑膿菌; 腸内細菌目細菌; MRSA等,CFPM + VCM; TAZ/PIPC + VCM,血行動態不安定のため、最広域でのエンピリック治療を行います。
-発熱性好中球減少症 (FN),3,1,*,*,*,*,1,緑膿菌; 腸内細菌目細菌; MRSA,AZT + VCM; AMK + VCM,PCGアレルギー考慮の抗緑膿菌＋抗MRSAカバーです。
-発熱性好中球減少症 (FN),99,0,*,*,*,0,0,緑膿菌; 腸内細菌目細菌,CFPM; TAZ/PIPC,迅速な抗緑膿菌活性を持つ殺菌的抗菌薬の投与が原則です。
-発熱性好中球減少症 (FN),100,0,*,*,*,0,1,緑膿菌; 腸内細菌目細菌,AZT + VCM; AMK + VCM,PCGアレルギーを考慮します。
-カテーテル関連血流感染症 (CRBSI),1,*,1,*,*,1,0,CNS; MRSA; 緑膿菌; Candida属,VCM + CFPM; DAP + CFPM,重症またはグラム陰性桿菌リスクのため広域カバーとします。
-カテーテル関連血流感染症 (CRBSI),2,*,1,*,*,1,1,CNS; MRSA; 緑膿菌; Candida属,VCM + AZT; DAP + AZT,PCGアレルギーを考慮し、グラム陰性カバーにAZTを使用します。
-カテーテル関連血流感染症 (CRBSI),99,*,0,*,*,0,0,CNS; MRSA; Candida属,VCM; DAP,カテーテルの抜去を検討し、
+syndrome,trigger,action,value,rationale
+市中肺炎 (CAP) - 中等症〜重症,base,add_pathogen,肺炎球菌・インフルエンザ菌・非定型菌,定型菌・非定型菌の同時カバーが基本です。
+市中肺炎 (CAP) - 中等症〜重症,base,set_regimen,CTRX + AZM / SBT/ABPC + AZM,
+市中肺炎 (CAP) - 中等症〜重症,allergy_pcg,override_regimen,LVFX (500mg),ペニシリンアレルギーのため代替薬を選択。
+市中肺炎 (CAP) - 中等症〜重症,risk_pseudo,add_pathogen,緑膿菌,
+市中肺炎 (CAP) - 中等症〜重症,risk_pseudo,override_regimen,CFPM + AZM / TAZ/PIPC + AZM,緑膿菌リスク（構造的肺疾患等）のため抗緑膿菌薬へ変更。
+市中肺炎 (CAP) - 中等症〜重症,risk_mrsa,add_pathogen,MRSA,
+市中肺炎 (CAP) - 中等症〜重症,risk_mrsa,add_regimen,VCM,MRSAリスクがあるためVCMを追加。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,base,add_pathogen,大腸菌・Klebsiella属,腸内細菌目細菌をターゲットとします。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,base,set_regimen,CTRX / CMZ,
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,allergy_pcg,override_regimen,LVFX / AMK,ペニシリンアレルギーのため代替薬。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_esbl,add_pathogen,ESBL産生菌,
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_esbl,override_regimen,MEPM / FMOX,ESBLリスクに基づきカルバペネム系等を選択。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_pseudo,add_pathogen,緑膿菌,
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_pseudo,override_regimen,CFPM / TAZ/PIPC,緑膿菌カバーへアップグレード。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,is_shock,override_regimen,MEPM,ショック時は初手からMEPMを選択。
+皮膚軟部組織感染症 (SSTI),base,add_pathogen,化膿レンサ球菌・黄色ブドウ球菌(MSSA),基本はグラム陽性球菌をターゲット。
+皮膚軟部組織感染症 (SSTI),base,set_regimen,CEZ / SBT/ABPC,
+皮膚軟部組織感染症 (SSTI),allergy_pcg,override_regimen,CLDM / VCM,アレルギーのためCLDM等へ変更。
+皮膚軟部組織感染症 (SSTI),risk_mrsa,add_pathogen,MRSA,
+皮膚軟部組織感染症 (SSTI),risk_mrsa,add_regimen,VCM / DAP,MRSAカバーを追加。
+皮膚軟部組織感染症 (SSTI),risk_pseudo,override_regimen,TAZ/PIPC,動物咬傷や糖尿病性足潰瘍による緑膿菌・嫌気性菌リスク。
+腹腔内感染症 (IAI),base,add_pathogen,大腸菌・嫌気性菌・腸球菌,嫌気性菌（B. fragilis等）のカバーが必須。膿瘍時はドレナージ優先。
+腹腔内感染症 (IAI),base,set_regimen,CMZ / CTRX + MNZ,
+腹腔内感染症 (IAI),allergy_pcg,override_regimen,LVFX + MNZ,アレルギー代替薬。
+腹腔内感染症 (IAI),risk_esbl,add_pathogen,ESBL産生菌,
+腹腔内感染症 (IAI),risk_esbl,override_regimen,MEPM,ESBLカバーのためMEPMへ変更。
+腹腔内感染症 (IAI),risk_pseudo,add_pathogen,緑膿菌,
+腹腔内感染症 (IAI),risk_pseudo,override_regimen,TAZ/PIPC,緑膿菌カバー。
+細菌性髄膜炎 (市中感染),base,add_pathogen,肺炎球菌・髄膜炎菌・インフルエンザ菌,血培採取後、直ちに抗菌薬＋デキサメタゾン。
+細菌性髄膜炎 (市中感染),base,set_regimen,CTRX (4g/d) + VCM,
+細菌性髄膜炎 (市中感染),allergy_pcg,override_regimen,MEPM (6g/d) + VCM,アレルギー時はMEPMへ変更。
+細菌性髄膜炎 (市中感染),risk_lis,add_pathogen,リステリア,50歳以上等のリステリアリスク。
+細菌性髄膜炎 (市中感染),risk_lis,add_regimen,ABPC (12g/d),リステリアカバーとしてABPCを追加。
+発熱性好中球減少症 (FN),base,add_pathogen,緑膿菌・ブドウ球菌・腸内細菌目,迅速な抗緑膿菌薬の投与が原則。
+発熱性好中球減少症 (FN),base,set_regimen,CFPM / TAZ/PIPC,
+発熱性好中球減少症 (FN),allergy_pcg,override_regimen,AZT + VCM,アレルギー時はAZT等を選択。
+発熱性好中球減少症 (FN),risk_mrsa,add_pathogen,MRSA,
+発熱性好中球減少症 (FN),risk_mrsa,add_regimen,VCM / LZD,MRSAリスク考慮。
+発熱性好中球減少症 (FN),is_shock,override_regimen,MEPM + VCM,ショック時は最広域へエスカレーション。
+カテーテル関連血流感染症 (CRBSI),base,add_pathogen,CNS・黄色ブドウ球菌・Candida属,カテ抜去が根幹。
+カテーテル関連血流感染症 (CRBSI),base,set_regimen,VCM / DAP,
+カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_pathogen,緑膿菌,グラム陰性桿菌リスク。
+カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_regimen,CFPM / MEPM,緑膿菌カバーを追加。
