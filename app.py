@@ -1,4 +1,4 @@
-Import streamlit as st
+import streamlit as st
 import pandas as pd
 
 # ページ設定 (スマホ最適化)
@@ -37,6 +37,10 @@ risk_df = load_data("risks.csv")
 # リスクIDをキーにして説明文を引ける辞書を作る
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
+# CSVが読み込めない場合のエラーハンドリング（テスト用に追加）
+if df is None:
+    st.error("⚠️ data.csv が読み込めません。ファイルが同じフォルダにあるか確認してください。")
+    st.stop()
 
 syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
 syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
@@ -47,15 +51,16 @@ if syndrome != "未選択":
     
     # UI改善: チェックボックスからiPhoneライクなトグルスイッチに変更
     c1, c2 = st.columns(2)
-with c1:
-    mrsa = st.toggle("MRSAリスク", help=risk_help.get('risk_mrsa'))
-    pseudo = st.toggle("緑膿菌リスク", help=risk_help.get('risk_pseudo'))
-    allergy = st.toggle("PCGアレルギー", help=risk_help.get('allergy_pcg'))
-with c2:
-    esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
-    lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
-    shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
-
+    
+    # 【修正箇所1】 if文の中にインデントを入れ、変数名を判定用のものと統一
+    with c1:
+        risk_mrsa = st.toggle("MRSAリスク", help=risk_help.get('risk_mrsa'))
+        risk_pseudo = st.toggle("緑膿菌リスク", help=risk_help.get('risk_pseudo'))
+        allergy_pcg = st.toggle("PCGアレルギー", help=risk_help.get('allergy_pcg'))
+    with c2:
+        risk_esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
+        risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
+        is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
 
     # --- ルールエンジンの評価プロセス ---
     active_triggers = ['base']
@@ -110,17 +115,25 @@ with c2:
         st.subheader("💊 推奨エンピリック治療")
         
         st.markdown("**🎯 想定起炎菌:**")
-        st.info(" , ".join(final_pathogens))
+        # リストが空の場合のプレースホルダーを追加
+        pathogen_display = " , ".join(final_pathogens) if final_pathogens else "データなし"
+        st.info(pathogen_display)
 
         st.markdown("**💉 推奨レジメン:**")
-        for r in final_regimens:
-            for split_r in r.split(' / '):
-                if split_r.strip():
-                    st.success(split_r.strip())
+        if final_regimens:
+            for r in final_regimens:
+                for split_r in r.split(' / '):
+                    if split_r.strip():
+                        st.success(split_r.strip())
+        else:
+            st.warning("該当するレジメンデータがありません")
 
         with st.expander("📖 ロジックの実行軌跡 (Rationale)"):
-            for msg in rationales:
-                st.markdown(msg)
+            if rationales:
+                for msg in rationales:
+                    st.markdown(msg)
+            else:
+                st.markdown("実行軌跡はありません。")
 
     # --- 新人教育用 LLMプロンプト生成機能 ---
     st.divider()
@@ -129,8 +142,8 @@ with c2:
     
     # 選択状況に応じたテキストの動的生成
     risk_text = "特になし" if not active_risk_names else "、".join(active_risk_names)
-    regimen_text = " または ".join(final_regimens)
-    pathogen_text = "、".join(final_pathogens)
+    regimen_text = " または ".join(final_regimens) if final_regimens else "不明"
+    pathogen_text = "、".join(final_pathogens) if final_pathogens else "不明"
     
     llm_prompt = f"""あなたは感染症専門医および指導医です。新人医療従事者（若手薬剤師や研修医）に対して、以下のエンピリック治療の選択ロジックを分かりやすく解説してください。
 
@@ -152,4 +165,3 @@ with c2:
 
     # コピーしやすいように st.code を使用
     st.code(llm_prompt, language="markdown")
-
