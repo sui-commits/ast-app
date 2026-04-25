@@ -184,12 +184,11 @@ with st.container(border=True):
     st.info(pathogen_display)
 
     st.markdown("**💉 推奨レジメン:**")
-    if final_regimens:
-        for r in final_regimens:
-            # スラッシュ区切りなどで複数の候補がある場合の表示分割
-            for split_r in r.split(' / '):
-                if split_r.strip():
-                    st.success(split_r.strip())
+        if final_regimens:
+            for r in final_regimens:
+                if r.strip():
+                    st.success(r.strip())  # 👈 分割せず、CSVのデータをそのまま表示する
+
     else:
         st.warning("条件に合致する安全なレジメンデータがありません。代替薬を確認してください。")
 
