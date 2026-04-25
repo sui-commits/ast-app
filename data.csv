@@ -60,3 +60,25 @@ syndrome,trigger,action,value,rationale
 敗血症 (原因不明),base,set_regimen,TAZ/PIPC / CFPM,
 敗血症 (原因不明),risk_mrsa,add_regimen,VCM,
 敗血症 (原因不明),is_shock,override_regimen,MEPM + VCM,ショック時はカルバペネム＋VCMの最広域レジメンを選択。
+院内肺炎 / VAP (HAP/VAP),base,add_pathogen,緑膿菌・腸内細菌目細菌・黄色ブドウ球菌(MSSA),院内発症のため緑膿菌カバーを標準とします。
+院内肺炎 / VAP (HAP/VAP),base,set_regimen,CFPM / TAZ/PIPC,
+院内肺炎 / VAP (HAP/VAP),allergy_pcg,override_regimen,AZT + LVFX,アレルギー代替薬。
+院内肺炎 / VAP (HAP/VAP),risk_mrsa,add_pathogen,MRSA,
+院内肺炎 / VAP (HAP/VAP),risk_mrsa,add_regimen,VCM / LZD,MRSAリスク（VAP、先行抗菌薬など）があるため追加。
+院内肺炎 / VAP (HAP/VAP),risk_esbl,add_pathogen,ESBL産生菌,
+院内肺炎 / VAP (HAP/VAP),risk_esbl,override_regimen,MEPM,ESBLカバーのためMEPMを選択。
+急性胆管炎 (TG18準拠),base,add_pathogen,大腸菌・Klebsiella属・嫌気性菌・腸球菌,血液培養2セット採取し、早期の胆道ドレナージ適応を評価します。
+急性胆管炎 (TG18準拠),base,set_regimen,CMZ / CTRX + MNZ / SBT/ABPC,
+急性胆管炎 (TG18準拠),allergy_pcg,override_regimen,LVFX + MNZ,
+急性胆管炎 (TG18準拠),risk_esbl,add_pathogen,ESBL産生菌,
+急性胆管炎 (TG18準拠),risk_esbl,override_regimen,MEPM,
+急性胆管炎 (TG18準拠),risk_pseudo,add_pathogen,緑膿菌,胆道ステント留置例や医療関連感染など。
+急性胆管炎 (TG18準拠),risk_pseudo,override_regimen,TAZ/PIPC / CFPM + MNZ,緑膿菌カバーへアップグレード。
+急性胆管炎 (TG18準拠),is_shock,override_regimen,MEPM / TAZ/PIPC,重症（TG18 Grade III）のため広域かつ殺菌的なレジメンを選択。
+壊死性筋膜炎,base,add_pathogen,化膿レンサ球菌・MSSA・嫌気性菌・GNR,外科的デブリドマンが最優先。毒素産生抑制のためCLDMを併用します。
+壊死性筋膜炎,base,set_regimen,TAZ/PIPC + CLDM + VCM / MEPM + CLDM + VCM,
+壊死性筋膜炎,allergy_pcg,override_regimen,AZT + VCM + CLDM + MNZ,
+術後/医療関連髄膜炎,base,add_pathogen,緑膿菌・MRSA・CNS・Acinetobacter,脳外科術後や脳室ドレーン関連。市中感染とは起炎菌が異なります。
+術後/医療関連髄膜炎,base,set_regimen,MEPM (6g/d) + VCM,
+術後/医療関連髄膜炎,allergy_pcg,override_regimen,AZT + LVFX (高用量) + VCM,
+
