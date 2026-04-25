@@ -42,3 +42,21 @@ syndrome,trigger,action,value,rationale
 カテーテル関連血流感染症 (CRBSI),base,set_regimen,VCM / DAP,
 カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_pathogen,緑膿菌,グラム陰性桿菌リスク。
 カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_regimen,CFPM / MEPM,緑膿菌カバーを追加。
+骨関節感染症 (化膿性関節炎・骨髄炎),base,add_pathogen,黄色ブドウ球菌 (MSSA)・レンサ球菌,基本はグラム陽性球菌（特に黄色ブドウ球菌）をターゲットとします。
+骨関節感染症 (化膿性関節炎・骨髄炎),base,set_regimen,CEZ / SBT/ABPC,
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,add_pathogen,MRSA,MRSAリスクがある場合はVCMまたはDAPを選択。
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,override_regimen,VCM / DAP,
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_pathogen,緑膿菌,外傷や術後、糖尿病性足潰瘍に伴う場合は緑膿菌もカバー。
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_regimen,CFPM / TAZ/PIPC,
+感染性心内膜炎 (IE),base,add_pathogen,レンサ球菌属・ブドウ球菌属,血液培養の結果判明前に開始する場合、弁の状態や緊急度を評価。
+感染性心内膜炎 (IE),base,set_regimen,PCG + GM / CTRX / CEZ,
+感染性心内膜炎 (IE),risk_mrsa,add_pathogen,MRSA,人工弁や医療暴露歴がある場合はMRSAをカバー。
+感染性心内膜炎 (IE),risk_mrsa,override_regimen,VCM + GM,
+感染性心内膜炎 (IE),is_shock,override_regimen,VCM + GM + CTRX,急性発症やショック時は広域カバー（VCM+GM+CTRX等）で開始。
+感染性腸炎 / CDI,base,add_pathogen,Campylobacter・Salmonella・CDI,重症度や先行抗菌薬の使用歴を評価。
+感染性腸炎 / CDI,base,set_regimen,経口 VCM (125mg 4回/日) / FDX,CDIが疑われる場合の標準治療（経口剤）。
+感染性腸炎 / CDI,is_shock,add_regimen,MNZ (500mg 8時間毎 点滴),重症・劇症CDIの場合は経口VCMにMNZ点滴を併用。
+敗血症 (原因不明),base,add_pathogen,GPC・GNR (広範),フォーカス不明の敗血症では主要な起炎菌を網羅する広域治療が必要。
+敗血症 (原因不明),base,set_regimen,TAZ/PIPC / CFPM,
+敗血症 (原因不明),risk_mrsa,add_regimen,VCM,
+敗血症 (原因不明),is_shock,override_regimen,MEPM + VCM,ショック時はカルバペネム＋VCMの最広域レジメンを選択。
