@@ -50,6 +50,7 @@ syndrome,trigger,action,value,rationale
 骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_regimen,CFPM / TAZ/PIPC,
 感染性心内膜炎 (IE),base,add_pathogen,レンサ球菌属・ブドウ球菌属,血液培養（異なる部位から3セット）採取が極めて重要。
 感染性心内膜炎 (IE),base,set_regimen,PCG + GM / CTRX / CEZ,
+感染性心内膜炎 (IE),allergy_pcg,override_regimen,CTRX / CEZ,ペニシリンアレルギーのためPCGを回避。交差反応リスクを評価しつつCTRXまたはCEZを推奨。
 感染性心内膜炎 (IE),risk_mrsa,add_pathogen,MRSA,人工弁や院内発症・IVDU歴がある場合はMRSAをカバー。
 感染性心内膜炎 (IE),risk_mrsa,override_regimen,VCM + GM,
 感染性心内膜炎 (IE),is_shock,override_regimen,VCM + CFPM / VCM + GM + CTRX,急性発症やショック時は広域カバーで開始し培養判明後にDe-escalation。
