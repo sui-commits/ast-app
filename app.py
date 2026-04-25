@@ -184,7 +184,7 @@ with st.container(border=True):
     st.info(pathogen_display)
 
     st.markdown("**💉 推奨レジメン:**")
-        if final_regimens:
+    if final_regimens:
             for r in final_regimens:
                 if r.strip():
                     st.success(r.strip())  # 👈 分割せず、CSVのデータをそのまま表示する
