@@ -2,44 +2,15 @@ import streamlit as st
 import pandas as pd
 from prompts.prompt_builder import get_education_prompt
 
-# ページ設定
+# ページ設定 (スマホ最適化)
 st.set_page_config(page_title="Expert AST Guide", layout="centered")
 
-# --- 初期状態のセット ---
-if "syndrome" not in st.session_state:
-    st.session_state.syndrome = "未選択"
-
-# --- UIデザインの修正 ---
+# --- UIデザイン: セレクトボックスの固定を解除し、標準の配置へ ---
 st.markdown("""
 <style>
-    /* メイン画面の余白 */
-    .main .block-container { padding-bottom: 120px; }
-    
-    /* 画面下部にピッカーボタンを固定 */
-    div[data-testid="stPopover"] {
-        position: fixed;
-        bottom: 20px; left: 5%; width: 90%; z-index: 9999;
-    }
-    
-    /* 擬似テキストフィールド（ポップオーバーのボタン）のデザイン */
-    div[data-testid="stPopover"] > button {
-        background-color: #e3f2fd; /* 👈 背景を薄い青色に設定 */
-        color: #333;
-        width: 100%;
-        border-radius: 12px;
-        border: 1px solid #90caf9;
-        padding: 15px;
-        font-size: 16px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        display: flex;
-        justify-content: flex-start;
-    }
-    
-    /* ポップオーバーの中身（ピッカー部分）のデザイン */
-    div[data-testid="stPopoverBody"] {
-        background-color: #f8f9fa; /* 👈 ピッカー内の背景色 */
-        border-radius: 12px;
-    }
+    .main .block-container { padding-bottom: 80px; }
+    .stToggle { padding: 8px; background: #f8f9fa; border-radius: 10px; margin-bottom: 5px; }
+    .stTooltipIcon { color: #007bff; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -53,32 +24,28 @@ def load_data(filename):
     except:
         return None
 
+# データの読み込み
 df = load_data("data.csv")
 risk_df = load_data("risks.csv")
+
+if df is None:
+    st.error("⚠️ data.csv が読み込めません。")
+    st.stop()
+
+# リスクIDをキーにして説明文を引ける辞書を作る
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
+
+# タイトル表示
+st.title("Expert AST Guide")
 
 syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
 
-# --- コンボボックス風ピッカーUI ---
-# ポップオーバーのボタン名に現在選択されているフォーカスを表示
-with st.popover(f"📌 感染フォーカス: {st.session_state.syndrome}"):
-    # ピッカーの中身（キーボードが出ないラジオボタンを使用）
-    selected = st.radio(
-        "感染フォーカスを選択", 
-        syndrome_list, 
-        index=syndrome_list.index(st.session_state.syndrome),
-        label_visibility="collapsed" # ラベルを隠してすっきり見せる
-    )
-    
-    # 選択が変更されたら画面をリロードして反映
-    if selected != st.session_state.syndrome:
-        st.session_state.syndrome = selected
-        st.rerun()
+# セレクトボックスを画面上部（標準位置）に配置
+syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
 
-# --- 以降のロジックは st.session_state.syndrome を使用 ---
-if st.session_state.syndrome != "未選択":
-    st.subheader(f"📍 ターゲット: {st.session_state.syndrome}")
-    st.caption("該当する患者リスクをオンにしてください")
+if syndrome != "未選択":
+    st.subheader("⚠️ 患者リスク層別化")
+    st.caption("該当する項目をオンにしてください")
     
     c1, c2 = st.columns(2)
     with c1:
@@ -90,7 +57,6 @@ if st.session_state.syndrome != "未選択":
         risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
         is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
 
-    # ... (この下のルール判定・結果表示・プロンプト生成は前回と同じです。syndromeの部分だけst.session_state.syndromeになります) ...
     # --- ルールエンジンの評価プロセス ---
     active_triggers = ['base']
     active_risk_names = []
@@ -151,7 +117,7 @@ if st.session_state.syndrome != "未選択":
         if final_regimens:
             for r in final_regimens:
                 if r.strip():
-                    # 👈 TAZ/PIPCが分割されないよう、そのまま表示しています
+                    # 👈 TAZ/PIPCが分割されないよう、そのまま表示
                     st.success(r.strip()) 
         else:
             st.warning("該当するレジメンデータがありません")
