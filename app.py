@@ -133,7 +133,7 @@ if not rules.empty:
         elif action == 'add_regimen' and val not in final_regimens:
             final_regimens.append(val)
 
-    # 🌟 ステップ2: 次に 'base' 以外のリスク・アレルギールールを適用し、必要に応じて上書きさせる
+    # 🌟 ステップ2: 次に 'base' 以外のリスク・アレルギールールを適用する
     for _, row in rules[rules['trigger'] != 'base'].iterrows():
         trigger = str(row['trigger']).strip()
         if trigger in active_triggers:
@@ -149,6 +149,22 @@ if not rules.empty:
             elif action == 'add_regimen' and val not in final_regimens:
                 final_regimens.append(val)
 
+    # 🌟 ステップ3: 禁忌薬剤の強制フィルタリング（最終安全チェック）
+    if allergy_pcg:
+        # 除外したいペニシリン系薬剤のキーワード（部分一致で弾きます）
+        forbidden_drugs = ["PCG", "TAZ/PIPC", "ABPC", "SBT/ABPC", "PIPC"]
+        
+        safe_regimens = []
+        for r in final_regimens:
+            # 薬剤名(r)の中に forbidden_drugs の文字列が含まれていないか確認
+            if not any(forbidden in r for forbidden in forbidden_drugs):
+                safe_regimens.append(r)
+            else:
+                # 削除した場合は理由を Rationale に追記して見える化する
+                rationales.append(f"⚠️ 【禁忌回避】ペニシリンアレルギーのため候補から「{r}」を強制除外しました。")
+        
+        final_regimens = safe_regimens
+
 # --- 結果表示 (推奨エンピリック治療カード) ---
 st.divider()
 
@@ -162,11 +178,12 @@ with st.container(border=True):
     st.markdown("**💉 推奨レジメン:**")
     if final_regimens:
         for r in final_regimens:
+            # スラッシュ区切りなどで複数の候補がある場合の表示分割
             for split_r in r.split(' / '):
                 if split_r.strip():
                     st.success(split_r.strip())
     else:
-        st.warning("条件に合致するレジメンデータがありません")
+        st.warning("条件に合致する安全なレジメンデータがありません。代替薬を確認してください。")
 
     with st.expander("📖 ロジックの実行軌跡 (Rationale)"):
         if rationales:
@@ -181,7 +198,7 @@ st.subheader("🎓 新人教育用：AI解説プロンプト")
 st.caption("右上にあるコピーボタンを押し、Gemini等に貼り付けてください。")
 
 risk_text = "特になし" if not active_risk_names else "、".join(active_risk_names)
-regimen_text = " または ".join(final_regimens) if final_regimens else "不明"
+regimen_text = " または ".join(final_regimens) if final_regimens else "代替薬を検討中"
 pathogen_text = "、".join(final_pathogens) if final_pathogens else "不明"
 
 llm_prompt = get_education_prompt(st.session_state.syndrome, risk_text, pathogen_text, regimen_text)
