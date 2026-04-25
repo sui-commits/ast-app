@@ -1,84 +1,83 @@
 syndrome,trigger,action,value,rationale
 市中肺炎 (CAP) - 中等症〜重症,base,add_pathogen,肺炎球菌・インフルエンザ菌・非定型菌,定型菌・非定型菌の同時カバーが基本です。
 市中肺炎 (CAP) - 中等症〜重症,base,set_regimen,CTRX + AZM / SBT/ABPC + AZM,
-市中肺炎 (CAP) - 中等症〜重症,allergy_pcg,override_regimen,LVFX (500mg),ペニシリンアレルギーのため代替薬を選択。
+市中肺炎 (CAP) - 中等症〜重症,allergy_pcg,override_regimen,LVFX (500mg),ペニシリンアレルギーのため呼吸器移行性の高いレスピラトリーキノロンを選択。
 市中肺炎 (CAP) - 中等症〜重症,risk_pseudo,add_pathogen,緑膿菌,
 市中肺炎 (CAP) - 中等症〜重症,risk_pseudo,override_regimen,CFPM + AZM / TAZ/PIPC + AZM,緑膿菌リスク（構造的肺疾患等）のため抗緑膿菌薬へ変更。
 市中肺炎 (CAP) - 中等症〜重症,risk_mrsa,add_pathogen,MRSA,
-市中肺炎 (CAP) - 中等症〜重症,risk_mrsa,add_regimen,VCM,MRSAリスクがあるためVCMを追加。
+市中肺炎 (CAP) - 中等症〜重症,risk_mrsa,add_regimen,LZD / VCM,MRSAリスク考慮。LZDは肺上皮被覆液への移行性が極めて高くVCMと同等以上に推奨されます。
 複雑性尿路感染症 (cUTI) / 腎盂腎炎,base,add_pathogen,大腸菌・Klebsiella属,腸内細菌目細菌をターゲットとします。
 複雑性尿路感染症 (cUTI) / 腎盂腎炎,base,set_regimen,CTRX / CMZ,
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,allergy_pcg,override_regimen,LVFX / AMK,ペニシリンアレルギーのため代替薬。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,allergy_pcg,override_regimen,LVFX / AMK,ペニシリンアレルギーのため代替薬。AMKは尿中排泄率が高く有用です。
 複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_esbl,add_pathogen,ESBL産生菌,
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_esbl,override_regimen,MEPM / FMOX,ESBLリスクに基づきカルバペネム系等を選択。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_esbl,override_regimen,FMOX / CMZ / MEPM,カルバペネム温存の観点から全身状態が安定していればFMOXやCMZ高用量を優先検討します。
 複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_pseudo,add_pathogen,緑膿菌,
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_pseudo,override_regimen,CFPM / TAZ/PIPC,緑膿菌カバーへアップグレード。
-複雑性尿路感染症 (cUTI) / 腎盂腎炎,is_shock,override_regimen,MEPM,ショック時は初手からMEPMを選択。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,risk_pseudo,override_regimen,CFPM / TAZ/PIPC,緑膿菌カバーへエスカレーション。
+複雑性尿路感染症 (cUTI) / 腎盂腎炎,is_shock,override_regimen,MEPM,敗血症性ショック時は初期治療の遅れを防ぐため直ちにMEPMを選択。
 皮膚軟部組織感染症 (SSTI),base,add_pathogen,化膿レンサ球菌・黄色ブドウ球菌(MSSA),基本はグラム陽性球菌をターゲット。
 皮膚軟部組織感染症 (SSTI),base,set_regimen,CEZ / SBT/ABPC,
-皮膚軟部組織感染症 (SSTI),allergy_pcg,override_regimen,CLDM / VCM,アレルギーのためCLDM等へ変更。
+皮膚軟部組織感染症 (SSTI),allergy_pcg,override_regimen,CEZ / CLDM + VCM,非重症（アナフィラキシー以外）であれば交差反応リスクが極めて低いCEZを第一選択とします。重症時はCLDM等へ変更。
 皮膚軟部組織感染症 (SSTI),risk_mrsa,add_pathogen,MRSA,
-皮膚軟部組織感染症 (SSTI),risk_mrsa,add_regimen,VCM / DAP,MRSAカバーを追加。
-皮膚軟部組織感染症 (SSTI),risk_pseudo,override_regimen,TAZ/PIPC,動物咬傷や糖尿病性足潰瘍による緑膿菌・嫌気性菌リスク。
-腹腔内感染症 (IAI),base,add_pathogen,大腸菌・嫌気性菌・腸球菌,嫌気性菌（B. fragilis等）のカバーが必須。膿瘍時はドレナージ優先。
+皮膚軟部組織感染症 (SSTI),risk_mrsa,add_regimen,VCM / DAP,MRSAカバーを追加。VCMは組織移行性を考慮し十分なローディングを検討。
+皮膚軟部組織感染症 (SSTI),risk_pseudo,override_regimen,TAZ/PIPC,動物咬傷や糖尿病性足潰瘍による多菌種（緑膿菌・嫌気性菌）リスクをカバー。
+腹腔内感染症 (IAI),base,add_pathogen,大腸菌・嫌気性菌・腸球菌,嫌気性菌（B. fragilis等）のカバーが必須。膿瘍時は抗菌薬に加えドレナージが予後を規定します。
 腹腔内感染症 (IAI),base,set_regimen,CMZ / CTRX + MNZ,
 腹腔内感染症 (IAI),allergy_pcg,override_regimen,LVFX + MNZ,アレルギー代替薬。
 腹腔内感染症 (IAI),risk_esbl,add_pathogen,ESBL産生菌,
-腹腔内感染症 (IAI),risk_esbl,override_regimen,MEPM,ESBLカバーのためMEPMへ変更。
+腹腔内感染症 (IAI),risk_esbl,override_regimen,MEPM,ESBLかつ腹腔内感染の場合は確実な治療のためMEPMへ変更。
 腹腔内感染症 (IAI),risk_pseudo,add_pathogen,緑膿菌,
 腹腔内感染症 (IAI),risk_pseudo,override_regimen,TAZ/PIPC,緑膿菌カバー。
-細菌性髄膜炎 (市中感染),base,add_pathogen,肺炎球菌・髄膜炎菌・インフルエンザ菌,血培採取後、直ちに抗菌薬＋デキサメタゾン。
-細菌性髄膜炎 (市中感染),base,set_regimen,CTRX (4g/d) + VCM,
-細菌性髄膜炎 (市中感染),allergy_pcg,override_regimen,MEPM (6g/d) + VCM,アレルギー時はMEPMへ変更。
-細菌性髄膜炎 (市中感染),risk_lis,add_pathogen,リステリア,50歳以上等のリステリアリスク。
-細菌性髄膜炎 (市中感染),risk_lis,add_regimen,ABPC (12g/d),リステリアカバーとしてABPCを追加。
-発熱性好中球減少症 (FN),base,add_pathogen,緑膿菌・ブドウ球菌・腸内細菌目,迅速な抗緑膿菌薬の投与が原則。
+細菌性髄膜炎 (市中感染),base,add_pathogen,肺炎球菌・髄膜炎菌・インフルエンザ菌,血培採取後ただちに抗菌薬＋デキサメタゾンを開始。髄液移行性を確保するため最大投与量が必要です。
+細菌性髄膜炎 (市中感染),base,set_regimen,CTRX (2g 12時間毎) + VCM,
+細菌性髄膜炎 (市中感染),allergy_pcg,override_regimen,MEPM (2g 8時間毎) + VCM,アレルギー時はMEPMへ変更（交差反応は1%未満とされ通常許容可能）。
+細菌性髄膜炎 (市中感染),risk_lis,add_pathogen,リステリア,50歳以上・免疫不全・妊婦等のリステリアリスク。
+細菌性髄膜炎 (市中感染),risk_lis,add_regimen,ABPC (2g 4時間毎),リステリアはセファロスポリン系が無効なためABPCを必ず追加。
+発熱性好中球減少症 (FN),base,add_pathogen,緑膿菌・ブドウ球菌・腸内細菌目,FNガイドラインに準拠し投与遅延を避け迅速に抗緑膿菌薬を開始。
 発熱性好中球減少症 (FN),base,set_regimen,CFPM / TAZ/PIPC,
-発熱性好中球減少症 (FN),allergy_pcg,override_regimen,AZT + VCM,アレルギー時はAZT等を選択。
+発熱性好中球減少症 (FN),allergy_pcg,override_regimen,AZT + VCM,アレルギー時はモノバクタム系のAZT等を選択。
 発熱性好中球減少症 (FN),risk_mrsa,add_pathogen,MRSA,
-発熱性好中球減少症 (FN),risk_mrsa,add_regimen,VCM / LZD,MRSAリスク考慮。
-発熱性好中球減少症 (FN),is_shock,override_regimen,MEPM + VCM,ショック時は最広域へエスカレーション。
-カテーテル関連血流感染症 (CRBSI),base,add_pathogen,CNS・黄色ブドウ球菌・Candida属,カテ抜去が根幹。
+発熱性好中球減少症 (FN),risk_mrsa,add_regimen,VCM / LZD,ポート感染疑い・明らかな肺炎・血圧低下時などにMRSAカバーを先行。
+発熱性好中球減少症 (FN),is_shock,override_regimen,MEPM + VCM + (AMK),ショック時は最広域へエスカレーション。AMK併用によるダブルカバーも考慮。
+カテーテル関連血流感染症 (CRBSI),base,add_pathogen,CNS・黄色ブドウ球菌・Candida属,速やかなカテーテル抜去が治療の根幹。
 カテーテル関連血流感染症 (CRBSI),base,set_regimen,VCM / DAP,
-カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_pathogen,緑膿菌,グラム陰性桿菌リスク。
+カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_pathogen,緑膿菌,グラム陰性桿菌リスク（重症・好中球減少・大腿静脈留置など）。
 カテーテル関連血流感染症 (CRBSI),risk_pseudo,add_regimen,CFPM / MEPM,緑膿菌カバーを追加。
-骨関節感染症 (化膿性関節炎・骨髄炎),base,add_pathogen,黄色ブドウ球菌 (MSSA)・レンサ球菌,基本はグラム陽性球菌（特に黄色ブドウ球菌）をターゲットとします。
+骨関節感染症 (化膿性関節炎・骨髄炎),base,add_pathogen,黄色ブドウ球菌 (MSSA)・レンサ球菌,血流低下部位への浸透が必要。長期投与となるため副作用モニタリングが重要です。
 骨関節感染症 (化膿性関節炎・骨髄炎),base,set_regimen,CEZ / SBT/ABPC,
-骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,add_pathogen,MRSA,MRSAリスクがある場合はVCMまたはDAPを選択。
-骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,override_regimen,VCM / DAP,
-骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_pathogen,緑膿菌,外傷や術後、糖尿病性足潰瘍に伴う場合は緑膿菌もカバー。
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,add_pathogen,MRSA,
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_mrsa,override_regimen,VCM / DAP,DAPはバイオフィルム形成時にも有用性が高いです。
+骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_pathogen,緑膿菌,外傷や術後・糖尿病性足潰瘍に伴う場合は緑膿菌もカバー。
 骨関節感染症 (化膿性関節炎・骨髄炎),risk_pseudo,add_regimen,CFPM / TAZ/PIPC,
-感染性心内膜炎 (IE),base,add_pathogen,レンサ球菌属・ブドウ球菌属,血液培養の結果判明前に開始する場合、弁の状態や緊急度を評価。
+感染性心内膜炎 (IE),base,add_pathogen,レンサ球菌属・ブドウ球菌属,血液培養（異なる部位から3セット）採取が極めて重要。
 感染性心内膜炎 (IE),base,set_regimen,PCG + GM / CTRX / CEZ,
-感染性心内膜炎 (IE),risk_mrsa,add_pathogen,MRSA,人工弁や医療暴露歴がある場合はMRSAをカバー。
+感染性心内膜炎 (IE),risk_mrsa,add_pathogen,MRSA,人工弁や院内発症・IVDU歴がある場合はMRSAをカバー。
 感染性心内膜炎 (IE),risk_mrsa,override_regimen,VCM + GM,
-感染性心内膜炎 (IE),is_shock,override_regimen,VCM + GM + CTRX,急性発症やショック時は広域カバー（VCM+GM+CTRX等）で開始。
-感染性腸炎 / CDI,base,add_pathogen,Campylobacter・Salmonella・CDI,重症度や先行抗菌薬の使用歴を評価。
-感染性腸炎 / CDI,base,set_regimen,経口 VCM (125mg 4回/日) / FDX,CDIが疑われる場合の標準治療（経口剤）。
-感染性腸炎 / CDI,is_shock,add_regimen,MNZ (500mg 8時間毎 点滴),重症・劇症CDIの場合は経口VCMにMNZ点滴を併用。
+感染性心内膜炎 (IE),is_shock,override_regimen,VCM + CFPM / VCM + GM + CTRX,急性発症やショック時は広域カバーで開始し培養判明後にDe-escalation。
+感染性腸炎 / CDI,base,add_pathogen,Campylobacter・Salmonella・CDI,原則として便培養・毒素検査を施行。重症度や先行抗菌薬の使用歴を評価。
+感染性腸炎 / CDI,base,set_regimen,経口 VCM (125mg 4回/日) / FDX,CDIが疑われる場合の標準治療。再発リスクが高い場合はFDX（フィダキソマイシン）を優先。
+感染性腸炎 / CDI,is_shock,add_regimen,MNZ (500mg 8時間毎 点滴),イレウス合併等の重症・劇症CDIで経口薬が腸管に到達しない場合はMNZ点滴を併用。
 敗血症 (原因不明),base,add_pathogen,GPC・GNR (広範),フォーカス不明の敗血症では主要な起炎菌を網羅する広域治療が必要。
 敗血症 (原因不明),base,set_regimen,TAZ/PIPC / CFPM,
 敗血症 (原因不明),risk_mrsa,add_regimen,VCM,
-敗血症 (原因不明),is_shock,override_regimen,MEPM + VCM,ショック時はカルバペネム＋VCMの最広域レジメンを選択。
+敗血症 (原因不明),is_shock,override_regimen,MEPM + VCM,ショック時はカルバペネム＋抗MRSA薬の最広域レジメンを遅滞なく投与。
 院内肺炎 / VAP (HAP/VAP),base,add_pathogen,緑膿菌・腸内細菌目細菌・黄色ブドウ球菌(MSSA),院内発症のため緑膿菌カバーを標準とします。
 院内肺炎 / VAP (HAP/VAP),base,set_regimen,CFPM / TAZ/PIPC,
 院内肺炎 / VAP (HAP/VAP),allergy_pcg,override_regimen,AZT + LVFX,アレルギー代替薬。
 院内肺炎 / VAP (HAP/VAP),risk_mrsa,add_pathogen,MRSA,
-院内肺炎 / VAP (HAP/VAP),risk_mrsa,add_regimen,VCM / LZD,MRSAリスク（VAP、先行抗菌薬など）があるため追加。
+院内肺炎 / VAP (HAP/VAP),risk_mrsa,add_regimen,LZD / VCM,MRSAリスク（VAP、先行抗菌薬等）。腎機能低下例や肺組織移行性を考慮しLZDも有用。
 院内肺炎 / VAP (HAP/VAP),risk_esbl,add_pathogen,ESBL産生菌,
 院内肺炎 / VAP (HAP/VAP),risk_esbl,override_regimen,MEPM,ESBLカバーのためMEPMを選択。
-急性胆管炎 (TG18準拠),base,add_pathogen,大腸菌・Klebsiella属・嫌気性菌・腸球菌,血液培養2セット採取し、早期の胆道ドレナージ適応を評価します。
+急性胆管炎 (TG18準拠),base,add_pathogen,大腸菌・Klebsiella属・嫌気性菌・腸球菌,血液培養2セット採取し、早期の胆道ドレナージ適応を評価します（ソースコントロールが最重要）。
 急性胆管炎 (TG18準拠),base,set_regimen,CMZ / CTRX + MNZ / SBT/ABPC,
 急性胆管炎 (TG18準拠),allergy_pcg,override_regimen,LVFX + MNZ,
 急性胆管炎 (TG18準拠),risk_esbl,add_pathogen,ESBL産生菌,
-急性胆管炎 (TG18準拠),risk_esbl,override_regimen,MEPM,
-急性胆管炎 (TG18準拠),risk_pseudo,add_pathogen,緑膿菌,胆道ステント留置例や医療関連感染など。
-急性胆管炎 (TG18準拠),risk_pseudo,override_regimen,TAZ/PIPC / CFPM + MNZ,緑膿菌カバーへアップグレード。
+急性胆管炎 (TG18準拠),risk_esbl,override_regimen,MEPM / FMOX,
+急性胆管炎 (TG18準拠),risk_pseudo,add_pathogen,緑膿菌,胆道ステント留置例・悪性腫瘍合併・医療関連感染など。
+急性胆管炎 (TG18準拠),risk_pseudo,override_regimen,TAZ/PIPC / CFPM + MNZ,緑膿菌・嫌気性菌カバーへアップグレード。
 急性胆管炎 (TG18準拠),is_shock,override_regimen,MEPM / TAZ/PIPC,重症（TG18 Grade III）のため広域かつ殺菌的なレジメンを選択。
-壊死性筋膜炎,base,add_pathogen,化膿レンサ球菌・MSSA・嫌気性菌・GNR,外科的デブリドマンが最優先。毒素産生抑制のためCLDMを併用します。
+壊死性筋膜炎,base,add_pathogen,化膿レンサ球菌・MSSA・嫌気性菌・GNR,早期の外科的デブリドマンが予後を決定づけます。CLDMは毒素産生抑制目的で必須。
 壊死性筋膜炎,base,set_regimen,TAZ/PIPC + CLDM + VCM / MEPM + CLDM + VCM,
 壊死性筋膜炎,allergy_pcg,override_regimen,AZT + VCM + CLDM + MNZ,
-術後/医療関連髄膜炎,base,add_pathogen,緑膿菌・MRSA・CNS・Acinetobacter,脳外科術後や脳室ドレーン関連。市中感染とは起炎菌が異なります。
-術後/医療関連髄膜炎,base,set_regimen,MEPM (6g/d) + VCM,
+術後/医療関連髄膜炎,base,add_pathogen,緑膿菌・MRSA・CNS・Acinetobacter,脳外科術後や脳室ドレーン関連。市中感染とは起炎菌が大きく異なります。
+術後/医療関連髄膜炎,base,set_regimen,MEPM (2g 8時間毎) + VCM,
 術後/医療関連髄膜炎,allergy_pcg,override_regimen,AZT + LVFX (高用量) + VCM,
-
