@@ -1,18 +1,25 @@
-import streamlit as st
+Import streamlit as st
 import pandas as pd
 
-# 1. ページ設定
+# ページ設定 (スマホ最適化)
 st.set_page_config(page_title="Expert AST Guide", layout="centered")
 
-# CSS: スマホ向けの余白調整
+# --- UIデザイン: デザインと余白の設定 ---
 st.markdown("""
 <style>
-    .main .block-container { padding-top: 20px; padding-bottom: 100px; }
+    .main .block-container { padding-bottom: 180px; }
+    div[data-testid="stSelectbox"] {
+        position: fixed;
+        bottom: 30px; left: 5%; width: 90%; z-index: 9999;
+        background-color: white; padding: 8px; border-radius: 15px;
+        box-shadow: 0 -8px 20px rgba(0,0,0,0.15);
+    }
     .stToggle { padding: 8px; background: #f8f9fa; border-radius: 10px; margin-bottom: 5px; }
+    .stTooltipIcon { color: #007bff; }
 </style>
 """, unsafe_allow_html=True)
 
-# 2. データの読み込み関数
+# ★ここが重要：データの読み込み関数を定義
 @st.cache_data
 def load_data(filename):
     try:
@@ -20,62 +27,59 @@ def load_data(filename):
         df.columns = df.columns.str.strip()
         df.fillna("", inplace=True)
         return df
-    except Exception as e:
-        # ファイルがない場合などは None を返す
+    except:
         return None
 
+# データの読み込み
 df = load_data("data.csv")
 risk_df = load_data("risks.csv")
+
+# リスクIDをキーにして説明文を引ける辞書を作る
 risk_help = dict(zip(risk_df['risk_id'], risk_df['description'])) if risk_df is not None else {}
 
-# --- ★重要: ここで先に syndrome_list を定義する ---
-if df is not None:
-    syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
-else:
-    syndrome_list = ["未選択"]
-    st.error("⚠️ data.csv が読み込めませんでした。GitHubにファイルがあるか確認してください。")
 
-# 3. 感染フォーカスの選択（キーボードが出ない UI）
-# st.segmented_control を使うことでボタン形式になり、入力モードになりません
-syndrome = st.segmented_control(
-    "📌 感染フォーカスを選択", 
-    syndrome_list, 
-    default="未選択"
-)
+syndrome_list = ["未選択"] + df['syndrome'].unique().tolist()
+syndrome = st.selectbox("📌 感染フォーカスを選択", syndrome_list)
 
-# 4. メインロジック
-if syndrome != "未選択" and df is not None:
+if syndrome != "未選択":
     st.subheader("⚠️ 患者リスク層別化")
     st.caption("該当する項目をオンにしてください")
     
+    # UI改善: チェックボックスからiPhoneライクなトグルスイッチに変更
     c1, c2 = st.columns(2)
-    with c1:
-        risk_mrsa = st.toggle("MRSAリスク", help=risk_help.get('risk_mrsa'))
-        risk_pseudo = st.toggle("緑膿菌リスク", help=risk_help.get('risk_pseudo'))
-        allergy_pcg = st.toggle("PCGアレルギー", help=risk_help.get('allergy_pcg'))
-    with c2:
-        risk_esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
-        risk_lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
-        is_shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
+with c1:
+    mrsa = st.toggle("MRSAリスク", help=risk_help.get('risk_mrsa'))
+    pseudo = st.toggle("緑膿菌リスク", help=risk_help.get('risk_pseudo'))
+    allergy = st.toggle("PCGアレルギー", help=risk_help.get('allergy_pcg'))
+with c2:
+    esbl = st.toggle("ESBLリスク", help=risk_help.get('risk_esbl'))
+    lis = st.toggle("リステリアリスク", help=risk_help.get('risk_lis'))
+    shock = st.toggle("ショック状態", help=risk_help.get('is_shock'))
 
-    # アクティブな条件の整理
+
+    # --- ルールエンジンの評価プロセス ---
     active_triggers = ['base']
-    active_risk_names = []
+    active_risk_names = [] # プロンプト出力用リスト
     
     if allergy_pcg: 
-        active_triggers.append('allergy_pcg'); active_risk_names.append("PCGアレルギー")
+        active_triggers.append('allergy_pcg')
+        active_risk_names.append("ペニシリンアレルギーあり")
     if risk_mrsa: 
-        active_triggers.append('risk_mrsa'); active_risk_names.append("MRSAリスク")
+        active_triggers.append('risk_mrsa')
+        active_risk_names.append("MRSAリスクあり")
     if risk_pseudo: 
-        active_triggers.append('risk_pseudo'); active_risk_names.append("緑膿菌リスク")
+        active_triggers.append('risk_pseudo')
+        active_risk_names.append("緑膿菌・グラム陰性菌リスクあり")
     if risk_esbl: 
-        active_triggers.append('risk_esbl'); active_risk_names.append("ESBLリスク")
+        active_triggers.append('risk_esbl')
+        active_risk_names.append("ESBL産生菌リスクあり")
     if risk_lis: 
-        active_triggers.append('risk_lis'); active_risk_names.append("リステリアリスク")
+        active_triggers.append('risk_lis')
+        active_risk_names.append("リステリアリスクあり（高齢・免疫不全など）")
     if is_shock: 
-        active_triggers.append('is_shock'); active_risk_names.append("ショック状態")
+        active_triggers.append('is_shock')
+        active_risk_names.append("敗血症性ショック（血行動態不安定）")
 
-    # フィルタリング
     rules = df[df['syndrome'] == syndrome]
     final_pathogens = []
     final_regimens = []
@@ -84,35 +88,69 @@ if syndrome != "未選択" and df is not None:
     for _, row in rules.iterrows():
         trigger = str(row['trigger']).strip()
         if trigger in active_triggers:
-            action, val, rat = str(row['action']), str(row['value']), str(row['rationale'])
-            if rat: rationales.append(f"• {rat}")
-            if action == 'add_pathogen' and val not in final_pathogens: final_pathogens.append(val)
-            elif action in ['set_regimen', 'override_regimen']: final_regimens = [val]
-            elif action == 'add_regimen' and val not in final_regimens: final_regimens.append(val)
+            action = str(row['action']).strip()
+            val = str(row['value']).strip()
+            rat = str(row['rationale']).strip()
 
-    # 結果表示
+            if rat:
+                rationales.append(f"• {rat}")
+
+            if action == 'add_pathogen':
+                final_pathogens.append(val)
+            elif action == 'set_regimen' or action == 'override_regimen':
+                final_regimens = [val]
+            elif action == 'add_regimen':
+                if val not in final_regimens:
+                    final_regimens.append(val)
+
+    # --- UIの改善: 結果をカードデザインで囲む ---
     st.divider()
+    
     with st.container(border=True):
         st.subheader("💊 推奨エンピリック治療")
+        
         st.markdown("**🎯 想定起炎菌:**")
-        st.info(" , ".join(final_pathogens) if final_pathogens else "不明")
+        st.info(" , ".join(final_pathogens))
 
         st.markdown("**💉 推奨レジメン:**")
-        if final_regimens:
-            for r in final_regimens:
-                for split_r in r.split(' / '):
-                    if split_r.strip(): st.success(split_r.strip())
-        
-        with st.expander("📖 ロジックの根拠"):
-            for msg in rationales: st.markdown(msg)
+        for r in final_regimens:
+            for split_r in r.split(' / '):
+                if split_r.strip():
+                    st.success(split_r.strip())
 
-    # LLM用プロンプト
+        with st.expander("📖 ロジックの実行軌跡 (Rationale)"):
+            for msg in rationales:
+                st.markdown(msg)
+
+    # --- 新人教育用 LLMプロンプト生成機能 ---
     st.divider()
-    st.subheader("🎓 教育用プロンプト")
+    st.subheader("🎓 新人教育用：AI解説プロンプト")
+    st.caption("以下の枠内の右上にあるコピーボタンを押し、Gemini等に貼り付けると、医学的な解説を出力します。")
+    
+    # 選択状況に応じたテキストの動的生成
     risk_text = "特になし" if not active_risk_names else "、".join(active_risk_names)
-    prompt = f"感染フォーカス: {syndrome}\nリスク: {risk_text}\n起炎菌: {'、'.join(final_pathogens)}\n推奨薬: {' / '.join(final_regimens)}\n\nこれについて若手向けに詳しく解説して。"
-    st.code(prompt, language="markdown")
+    regimen_text = " または ".join(final_regimens)
+    pathogen_text = "、".join(final_pathogens)
+    
+    llm_prompt = f"""あなたは感染症専門医および指導医です。新人医療従事者（若手薬剤師や研修医）に対して、以下のエンピリック治療の選択ロジックを分かりやすく解説してください。
 
-else:
-    if df is not None:
-        st.info("👆 上のボタンから感染フォーカスを選択してください。")
+【症例設定】
+・疑われる感染フォーカス: {syndrome}
+・患者のリスク因子: {risk_text}
+
+【当院システムが提示した推奨レジメン】
+・想定される起炎菌: {pathogen_text}
+・推奨薬剤: {regimen_text}
+
+【解説してほしいこと】
+1. なぜこの起炎菌を想定する必要があるのか（疫学やリスク因子との関連）
+2. なぜこの抗菌薬が選択されたのか（スペクトル、組織移行性、ガイドラインの根拠）
+3. この治療を行う上でのモニタリングの注意点（副作用、培養結果確認後のデ・エスカレーションのポイント）
+4. （もしあれば）代替薬の選択肢と、それを選ばなかった理由
+
+専門的な用語は使いつつも、クリニカル・リーズニングの思考プロセスが伝わるようにロジカルにステップ・バイ・ステップで解説してください。"""
+
+    # コピーしやすいように st.code を使用
+    st.code(llm_prompt, language="markdown")
+
+何が問題なの？
