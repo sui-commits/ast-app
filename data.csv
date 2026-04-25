@@ -1,4 +1,4 @@
-Syndrome,Priority,MRSA,Pseudo,ESBL,Listeria,Shock,PCG_Allergy,Pathogens,Regimens,Rationale
+syndrome,Priority,MRSA,Pseudo,ESBL,Listeria,Shock,PCG_Allergy,Pathogens,Regimens,Rationale
 市中肺炎 (CAP) - 中等症〜重症,1,1,1,*,*,*,0,肺炎球菌; インフルエンザ菌; 緑膿菌; MRSA,CFPM + VCM; TAZ/PIPC + VCM,緑膿菌およびMRSAカバーが必須です。抗MRSA薬を追加し、抗緑膿菌活性のあるβラクタム系を選択します。
 市中肺炎 (CAP) - 中等症〜重症,2,1,1,*,*,*,1,肺炎球菌; インフルエンザ菌; 緑膿菌; MRSA,AZT + LVFX + VCM,PCGアレルギーを考慮し、緑膿菌・MRSAをカバーする非ペニシリン系多剤併用とします。
 市中肺炎 (CAP) - 中等症〜重症,3,0,1,*,*,*,0,肺炎球菌; インフルエンザ菌; 緑膿菌,CFPM + AZM; TAZ/PIPC + AZM,緑膿菌カバーのため、第4世代セフェムまたはTAZ/PIPCへエスカレーションします。
