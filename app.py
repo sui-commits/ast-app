@@ -153,4 +153,3 @@ with c2:
     # コピーしやすいように st.code を使用
     st.code(llm_prompt, language="markdown")
 
-何が問題なの？
