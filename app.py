@@ -4,12 +4,26 @@ import pandas as pd
 # ページ設定 (スマホ最適化)
 st.set_page_config(page_title="Rule-Engine AST Guide", layout="centered")
 
-# カスタムCSS (余白調整とカードデザイン)
 st.markdown("""
 <style>
-    .reportview-container .main .block-container{ padding-top: 1rem; }
-    /* トグルの微調整 */
-    .stCheckbox { margin-bottom: 5px; }
+    /* 1. 下部に固定されるボックスに被らないよう、画面下の余白を確保 */
+    .main .block-container { padding-bottom: 180px; }
+
+    /* 2. セレクトボックスを画面の最下部に強制固定（これで下から出るようになります） */
+    div[data-testid="stSelectbox"] {
+        position: fixed;
+        bottom: 30px;
+        left: 5%;
+        width: 90%;
+        z-index: 9999;
+        background-color: white;
+        padding: 8px;
+        border-radius: 15px;
+        box-shadow: 0 -8px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* 3. トグルのデザインを少しスマホらしく */
+    .stToggle { padding: 8px; background: #f8f9fa; border-radius: 10px; margin-bottom: 5px; }
 </style>
 """, unsafe_allow_html=True)
 
